@@ -16,6 +16,7 @@ def mean(*args):
 
 #! DO NOT DELETE
 current_id = 0
+DEFINED_TYPES_OF_SHAPES = ("square", "rectangle", "circle", "triangle")
 
 #* library for all instances of this module
 instances = {
@@ -71,7 +72,7 @@ vectors = {
 }
 #* class for Vectors
 class Vector():
-    def __init__(self, origin:Point=Point(0,0), target:Point=Point(0,0), name:str="unnamedVector"):
+    def __init__(self, coords:tuple=(0,0), name:str="unnamedVector"):
         global current_id
         global vectors
         global instances
@@ -83,8 +84,8 @@ class Vector():
         instances["dict_by_id"][str(self.id)] = self
         self.name = name
 
-        self.i = target.get_distance_x(origin)
-        self.j = target.get_distance_y(origin)
+        self.i = coords[0]
+        self.j = coords[1]
     
     def get_coords(self):
         return (self.i, self.j)
@@ -100,25 +101,23 @@ class Force(Vector):
     def __init__(self, intensity:float=0, direction:float=0, name:str="unnamedForce"):
         i = intensity * cos(radians(direction))
         j = intensity * sin(radians(direction))
-        super().__init__(i,j,name)
+        super().__init__((i,j),name)
 
 class Acceleration(Vector):
     def __init__(self, intensity:float=0, direction:float=0, name:str="unnamedAcceleration"):
         i = intensity * cos(radians(direction))
         j = intensity * sin(radians(direction))
-        super().__init__(i,j,name)
+        super().__init__((i,j),name)
 
 class Speed(Vector):
     def __init__(self, intensity:float=0, direction:float=0, name:str="unnamedSpeed"):
         i = intensity * cos(radians(direction))
         j = intensity * sin(radians(direction))
-        super().__init__(i,j,name)
+        super().__init__((i,j),name)
 
 class Gravity(Force):
     def __init__(self, intensity:float=0, direction:float=270, name:str="unnamedSpeed"):
-        i = intensity * cos(radians(direction))
-        j = intensity * sin(radians(direction))
-        super().__init__(i,j,name)
+        super().__init__(intensity, direction, name)
 
 
 #* library for Shapes
@@ -141,13 +140,17 @@ class Shape():
         self.name = name
         self.type = type
         self.area = area
+    def get_type(self):
+        return self.type
+    def get_area(self):
+        return self.area
 
 class Square(Shape):
     def __init__(self, side:float=1, name:str="unnamedSquare"):
         super().__init__(type="square", name=name, area=side**2)
         self.side = side
 
-class Regtangle(Shape):
+class Rectangle(Shape):
     def __init__(self, widht:float=1, height:float=1, name:str="unnamedRectangle"):
         super().__init__(type="rectangle", name=name, area=widht*height)
         self.height= height
@@ -168,12 +171,44 @@ class Triangle(Shape):
         self.point2 = pointTwo
         self.point3 = pointThree
 
+#* library for Images
+images = {
+    "list_by_creation":[],
+    "dict_by_id":{}
+}
+#* class for Images
 class Image():
     pass
 
+#* library for Hitboxes
+hitboxes = {
+    "list_by_creation":[],
+    "dict_by_id":{}
+}
+#* class for Hitboxes
 class Hitbox():
-    def __init__(self, type:str,*dims ,name:str="unnamedHitbox"):
-        pass
+    def __init__(self, shapeType:str,*dims ,name:str="unnamedHitbox"):
+        assert shapeType in DEFINED_TYPES_OF_SHAPES, NameError(f"{shapeType} is not defined")
+        global current_id
+        global hitboxes
+        global instances
+        self.id = current_id
+        current_id += 1
+        hitboxes["list_by_creation"].append(self)
+        hitboxes["dict_by_id"][str(self.id)] = self
+        instances["list_by_creation"].append(self)
+        instances["dict_by_id"][str(self.id)] = self
+        self.name = name
+
+        self.shape = shapeType.lower()
+        if self.shape == "square": self.self = Square(name=f"shape of hitbox {self.name}", *dims)
+        elif self.shape == "rectangle": self.self = Rectangle(name=f"shape of hitbox {self.name}", *dims)
+        elif self.shape == "circle": self.self = Circle(name=f"shape of hitbox {self.name}", *dims)
+        elif self.shape == "triangle": self.self = Triangle(name=f"shape of hitbox {self.name}", *dims)
+
+    def get_shape():
+        return self.shape, self.self
+
 
 #* library for Objects
 objects = {
@@ -198,13 +233,20 @@ class Object():
         self.texture = texture
         self.hitbox = hitbox
 
+    def is_touching(self, object):
+        if self.hitbox.shape == "square":return "<FUNCTION NOT DEFINED>"
+        elif self.hitbox.shape == "rectangle":return "<FUNCTION NOT DEFINED>"
+        elif self.hitbox.shape == "circle": return "<FUNCTION NOT DEFINED>"
+        elif self.hitbox.shape == "triangle":return "<FUNCTION NOT DEFINED>"
 
 # TODO: charaters etc..
 
-#s = Point(0,1)
-#s2 = Point(1,2)
-#print(s.id)
-#print(s2.id)
+s = Point(0,1)
+s2 = Point(1,2)
+v = Vector((1,5))
+g = Gravity(9.81, 270)
+
+
 print(instances['dict_by_id'])
 # print(instances['dict_by_id']['0'].get_y())
 # print(instances['dict_by_id']['1'].get_y())
