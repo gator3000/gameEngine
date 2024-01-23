@@ -149,17 +149,28 @@ class Square(Shape):
     def __init__(self, side:float=1, name:str="unnamedSquare"):
         super().__init__(type="square", name=name, area=side**2)
         self.side = side
+    def is_touching(self, obj, pos):
+        return "<FUNCTION NOT DEFINED>"
 
 class Rectangle(Shape):
     def __init__(self, widht:float=1, height:float=1, name:str="unnamedRectangle"):
         super().__init__(type="rectangle", name=name, area=widht*height)
         self.height= height
         self.widht = widht
+    def is_touching(self, obj, pos):
+        return "<FUNCTION NOT DEFINED>"
+
 
 class Circle(Shape):
     def __init__(self, radius:float=1, name:str="unnamedCircle"):
         super().__init__(type="circle", name=name, area=pi*radius**2)
         self.radius=radius
+    def is_touching(self, obj, pos):
+        if obj.hitbox.type == "circle":
+            return max(self.radius, obj.hitbox.self.radius) <= self.pos.get_distance_exacte(obj.pos)
+        else:
+            return "<FUNCTION NOT DEFINED>"
+
 
 class Triangle(Shape):
     def __init__(self, pointOne:Point, pointTwo:Point, pointThree:Point, name:str="unnamedCircle"):
@@ -170,6 +181,9 @@ class Triangle(Shape):
         self.point1 = pointOne
         self.point2 = pointTwo
         self.point3 = pointThree
+    def is_touching(self, obj, pos):
+        return "<FUNCTION NOT DEFINED>"
+        
 
 #* library for Images
 images = {
@@ -233,11 +247,11 @@ class Object():
         self.texture = texture
         self.hitbox = hitbox
 
-    def is_touching(self, object):
-        if self.hitbox.shape == "square":return "<FUNCTION NOT DEFINED>"
-        elif self.hitbox.shape == "rectangle":return "<FUNCTION NOT DEFINED>"
-        elif self.hitbox.shape == "circle": return "<FUNCTION NOT DEFINED>"
-        elif self.hitbox.shape == "triangle":return "<FUNCTION NOT DEFINED>"
+    def is_touching(self, obj):
+        if self.hitbox.shape == "square":return self.hitbox.self.is_touching(obj, self.position)
+        elif self.hitbox.shape == "rectangle":return self.hitbox.self.is_touching(obj, self.position)
+        elif self.hitbox.shape == "circle": return self.hitbox.self.is_touching(obj, self.position)
+        elif self.hitbox.shape == "triangle":return self.hitbox.self.is_touching(obj, self.position)
 
 # TODO: charaters etc..
 
