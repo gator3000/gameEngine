@@ -151,11 +151,11 @@ class Square(Shape):
         self.side = side
     def is_touching(self, obj, pos):
         if obj.hitbox.shape == "square":
-            dist = obj.hitbox.self.side + self.side
+            dist = (obj.hitbox.self.side + self.side) / 2
             return pos.get_distance_x(obj.position) <= dist and pos.get_distance_y(obj.position) <= dist
         elif obj.hitbox.shape == "rectangle":
-            distheight = obj.hitbox.self.height + self.side
-            distwidth = obj.hitbox.self.widht + self.side
+            distheight = (obj.hitbox.self.height + self.side) / 2
+            distwidth = (obj.hitbox.self.widht + self.side) / 2
             return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
         else:
             return "<FUNCTION NOT DEFINED>"
@@ -167,12 +167,12 @@ class Rectangle(Shape):
         self.widht = widht
     def is_touching(self, obj, pos):
         if obj.hitbox.shape == "rectangle":
-            distheight = obj.hitbox.self.height + self.height
-            distwidth = obj.hitbox.self.widht + self.widht
+            distheight = (obj.hitbox.self.height + self.height) / 2
+            distwidth = (obj.hitbox.self.widht + self.widht) / 2
             return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
         elif obj.hitbox.shape == "square":
-            distheight = obj.hitbox.self.side + self.height
-            distwidth = obj.hitbox.self.side + self.widht
+            distheight = (obj.hitbox.self.side + self.height) / 2
+            distwidth = (obj.hitbox.self.side + self.widht) / 2
             return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
         else:
             return "<FUNCTION NOT DEFINED>"
@@ -184,7 +184,7 @@ class Circle(Shape):
         self.radius=radius
     def is_touching(self, obj, pos):
         if obj.hitbox.shape == "circle":
-            return self.radius + obj.hitbox.self.radius <= pos.get_distance_exacte(obj.position)
+            return (self.radius + obj.hitbox.self.radius) / 2 <= pos.get_distance_exacte(obj.position)
         else:
             return "<FUNCTION NOT DEFINED>"
 
