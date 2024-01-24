@@ -150,7 +150,15 @@ class Square(Shape):
         super().__init__(type="square", name=name, area=side**2)
         self.side = side
     def is_touching(self, obj, pos):
-        return "<FUNCTION NOT DEFINED>"
+        if obj.hitbox.shape == "square":
+            dist = obj.hitbox.self.side + self.side
+            return pos.get_distance_x(obj.position) <= dist and pos.get_distance_y(obj.position) <= dist
+        elif obj.hitbox.shape == "rectangle":
+            distheight = obj.hitbox.self.height + self.side
+            distwidth = obj.hitbox.self.widht + self.side
+            return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
+        else:
+            return "<FUNCTION NOT DEFINED>"
 
 class Rectangle(Shape):
     def __init__(self, widht:float=1, height:float=1, name:str="unnamedRectangle"):
@@ -158,7 +166,16 @@ class Rectangle(Shape):
         self.height= height
         self.widht = widht
     def is_touching(self, obj, pos):
-        return "<FUNCTION NOT DEFINED>"
+        if obj.hitbox.shape == "rectangle":
+            distheight = obj.hitbox.self.height + self.height
+            distwidth = obj.hitbox.self.widht + self.widht
+            return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
+        elif obj.hitbox.shape == "square":
+            distheight = obj.hitbox.self.side + self.height
+            distwidth = obj.hitbox.self.side + self.widht
+            return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
+        else:
+            return "<FUNCTION NOT DEFINED>"
 
 
 class Circle(Shape):
@@ -166,8 +183,8 @@ class Circle(Shape):
         super().__init__(type="circle", name=name, area=pi*radius**2)
         self.radius=radius
     def is_touching(self, obj, pos):
-        if obj.hitbox.type == "circle":
-            return max(self.radius, obj.hitbox.self.radius) <= self.pos.get_distance_exacte(obj.pos)
+        if obj.hitbox.shape == "circle":
+            return self.radius + obj.hitbox.self.radius <= pos.get_distance_exacte(obj.position)
         else:
             return "<FUNCTION NOT DEFINED>"
 
