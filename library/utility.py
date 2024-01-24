@@ -184,7 +184,11 @@ class Circle(Shape):
         self.radius=radius
     def is_touching(self, obj, pos):
         if obj.hitbox.shape == "circle":
-            return (self.radius + obj.hitbox.self.radius) / 2 <= pos.get_distance_exacte(obj.position)
+            return (self.radius + obj.hitbox.self.radius) / 2 >= pos.get_distance_exacte(obj.position)
+        if obj.hitbox.shape == "square":
+            x = (obj.side + self.radius) /2 >= obj.position.get_distance_x(pos)
+            y = (obj.side + self.radius) /2 >= obj.position.get_distance_y(pos)
+            return True if x and y else "<FUNCTION NOT DEFINED>"
         else:
             return "<FUNCTION NOT DEFINED>"
 
