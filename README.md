@@ -6,6 +6,7 @@
 
 
 ## Disclaimer !
+> [!NOTE]
 This project is here just for the recreational side of it. I'm just starting to learn packages in python.
 
 ## 1. Use :
