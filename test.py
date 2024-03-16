@@ -12,3 +12,5 @@ def hey(n:int,x:int):
         x(i)
 
 hey(3, lambda x : func_complique(x))
+
+pout(test)
