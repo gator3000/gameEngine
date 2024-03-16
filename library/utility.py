@@ -16,7 +16,7 @@ def mean(*args):
 
 #! DO NOT DELETE
 current_id = 0
-DEFINED_TYPES_OF_SHAPES = ("square", "rectangle", "circle", "triangle")
+DEFINED_TYPES_OF_SHAPES = ("rectangle", "circle")
 
 #* library for all instances of this module
 instances = {
@@ -95,6 +95,7 @@ class Vector():
         '''return direction in degrees'''
         return math.degrees(math.atan2(self.j, self.i))
     def get_sens(self):
+        '''return 1 if direction is -x°, 2 if dir is +x° and 0 if 0°'''
         return 1 if self.direction > 0 else 2 if self.direction < 0 else 0
 
 class Force(Vector):
@@ -127,7 +128,7 @@ shapes = {
 }
 #* class for Shapes
 class Shape():
-    def __init__(self, type:str="square", name:str="unnamedShape", area:float=1):
+    def __init__(self, type:str, name:str="unnamedShape", area:float=1):
         global current_id
         global shapes
         global instances
@@ -145,21 +146,6 @@ class Shape():
     def get_area(self):
         return self.area
 
-class Square(Shape):
-    def __init__(self, side:float=1, name:str="unnamedSquare"):
-        super().__init__(type="square", name=name, area=side**2)
-        self.side = side
-    def is_touching(self, obj, pos):
-        if obj.hitbox.shape == "square":
-            dist = (obj.hitbox.self.side + self.side) / 2
-            return pos.get_distance_x(obj.position) <= dist and pos.get_distance_y(obj.position) <= dist
-        elif obj.hitbox.shape == "rectangle":
-            distheight = (obj.hitbox.self.height + self.side) / 2
-            distwidth = (obj.hitbox.self.widht + self.side) / 2
-            return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
-        else:
-            return "<FUNCTION NOT DEFINED>"
-
 class Rectangle(Shape):
     def __init__(self, widht:float=1, height:float=1, name:str="unnamedRectangle"):
         super().__init__(type="rectangle", name=name, area=widht*height)
@@ -170,7 +156,7 @@ class Rectangle(Shape):
             distheight = (obj.hitbox.self.height + self.height) / 2
             distwidth = (obj.hitbox.self.widht + self.widht) / 2
             return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
-        elif obj.hitbox.shape == "square":
+        elif obj.hitbox.shape == "circle":
             distheight = (obj.hitbox.self.side + self.height) / 2
             distwidth = (obj.hitbox.self.side + self.widht) / 2
             return pos.get_distance_x(obj.position) <= distwidth and pos.get_distance_y(obj.position) <= distheight
@@ -185,26 +171,13 @@ class Circle(Shape):
     def is_touching(self, obj, pos):
         if obj.hitbox.shape == "circle":
             return (self.radius + obj.hitbox.self.radius) / 2 >= pos.get_distance_exacte(obj.position)
-        if obj.hitbox.shape == "square":
+        if obj.hitbox.shape == "rectangle":
             x = (obj.side + self.radius) /2 >= obj.position.get_distance_x(pos)
             y = (obj.side + self.radius) /2 >= obj.position.get_distance_y(pos)
             return True if x and y else "<FUNCTION NOT DEFINED>"
         else:
             return "<FUNCTION NOT DEFINED>"
 
-
-class Triangle(Shape):
-    def __init__(self, pointOne:Point, pointTwo:Point, pointThree:Point, name:str="unnamedCircle"):
-        self.len_base = pointOne.get_distance_exacte(pointTwo)
-        self.len_height = pointThree.get_distance_exacte(Point(mean(pointOne.x,pointTwo.x),mean(pointOne.y,pointTwo.y)))
-        area = self.len_base*self.len_height/2
-        super().__init__(type="triangle", name=name, area=area)
-        self.point1 = pointOne
-        self.point2 = pointTwo
-        self.point3 = pointThree
-    def is_touching(self, obj, pos):
-        return "<FUNCTION NOT DEFINED>"
-        
 
 #* library for Images
 images = {
