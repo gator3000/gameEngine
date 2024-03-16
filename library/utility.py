@@ -196,7 +196,7 @@ hitboxes = {
 #* class for Hitboxes
 class Hitbox():
     def __init__(self, shapeType:str,*dims ,name:str="unnamedHitbox"):
-        assert shapeType in DEFINED_TYPES_OF_SHAPES, NameError(f"{shapeType} is not defined")
+        assert shapeType in DEFINED_TYPES_OF_SHAPES, ValueError(f"{shapeType} is not defined")
         global current_id
         global hitboxes
         global instances
@@ -209,11 +209,9 @@ class Hitbox():
         self.name = name
 
         self.shape = shapeType.lower()
-        if self.shape == "square": self.self = Square(name=f"shape of hitbox {self.name}", *dims)
-        elif self.shape == "rectangle": self.self = Rectangle(name=f"shape of hitbox {self.name}", *dims)
+        if self.shape == "rectangle": self.self = Rectangle(name=f"shape of hitbox {self.name}", *dims)
         elif self.shape == "circle": self.self = Circle(name=f"shape of hitbox {self.name}", *dims)
-        elif self.shape == "triangle": self.self = Triangle(name=f"shape of hitbox {self.name}", *dims)
-
+        
     def get_shape():
         return self.shape, self.self
 
@@ -242,10 +240,8 @@ class Object():
         self.hitbox = hitbox
 
     def is_touching(self, obj):
-        if self.hitbox.shape == "square":return self.hitbox.self.is_touching(obj, self.position)
-        elif self.hitbox.shape == "rectangle":return self.hitbox.self.is_touching(obj, self.position)
+        if self.hitbox.shape == "rectangle":return self.hitbox.self.is_touching(obj, self.position)
         elif self.hitbox.shape == "circle": return self.hitbox.self.is_touching(obj, self.position)
-        elif self.hitbox.shape == "triangle":return self.hitbox.self.is_touching(obj, self.position)
 
 # TODO: charaters etc..
 
