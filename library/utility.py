@@ -1,6 +1,5 @@
 from math import *
-#! not used yet :
-# from pygame import *
+#! not used yet : from pygame import *
 
 
 #* function who caluculate mean of *args

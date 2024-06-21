@@ -1,32 +1,9 @@
 import os
 import polices.frame_collector as fr_coll
 
-MAIN = """
-import setup
-
-class Main():
-    def __init__(self, setup:dict):
-        self.main()
-    def main(self):
-        '''Your main function'''
-        pass
-
-
-if __name__=="__main__":
-    mainObject = Main(setup.setup)
-"""
-
-SETUP = """
-setup = {
-    "name":"My Miscellaneous Game",
-    "file":"my_miscellaneous_game.py",
-    "version":"0.1.0",
-    "author":"me"
-}
-"""
 
 def normalize(name:str):
-    forbidden=["/"," ","\"","'","!",":",",","*"]
+    forbidden=["/", " " ,"\"", "'", "!", ":", ",", "*", "\\"]
     replaced={"é":"e","è":"e","à":"a","ç":"c","ù":"u","ï":"i","î":"i"}
     normalized=[]
     for l in name.lower():
@@ -41,11 +18,60 @@ def create_file(path, name, content=None):
             f.write(content)
 
 
-name=input("Nom du jeu : ")
-name_normalized=normalize(name)
-path=input("Chemin du jeu ('.' si dans le dossir courant): ")
-root=path.strip()+"/"+name_normalized
-#print(name_normalized)
+name = input("Name of the game : ")
+path = input("Path of th game ('.' if in current directory) : ")
+author = input("Votre nom : ")
+authoremail = input("Your e-mail : ")
+gamelicense = input("License of that game : ")
+
+name_normalized = normalize(name)
+root = path.strip()+"/"+name_normalized
+
+
+
+
+SETUP = """
+setup = {
+    "general informations": {
+        "name": '"""+ name +"""',
+        "path": '"""+ root +"""',
+        "version": '0.0.0',
+        "author": ['"""+ author +"""', """+ authoremail +"""],
+        "license": '"""+ gamelicense +"""'
+    },
+
+    "your setups (example)": {
+        "tick": 10,
+        "step": 50
+    }
+}
+"""
+
+
+MAIN = """
+from setup import *
+
+class Game():
+    def __init__(self, setup:dict):
+        self.setup = setup
+        self.game = True
+    
+    def mainloop(self, *args, **kwargs):
+        '''Your looping function'''
+        while self.game:
+            self.main()
+    
+    def main(self):
+        '''Your main looped function'''
+        pass
+
+
+if __name__=="__main__":
+    game = Game(setup)
+    game.mainloop()
+"""
+
+
 
 pwd=root
 
