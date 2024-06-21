@@ -36,7 +36,7 @@ setup = {
         "name": '"""+ name +"""',
         "path": '"""+ root +"""',
         "version": '0.0.0',
-        "author": ['"""+ author +"""', """+ authoremail +"""],
+        "author": ['"""+ author +"""', '"""+ authoremail +"""'],
         "license": '"""+ gamelicense +"""'
     },
 
